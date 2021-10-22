@@ -26,7 +26,7 @@ def send_message_robot(adres):
 def contact_the_robot(adres):
     answer = requests.get(adres)
     message = 'Проверка связи с роботом...' 
-
+    print(message)
     with alive_bar(len(message), bar='brackets', spinner='radioactive') as bar:
 
         for _ in range(len(message)):
