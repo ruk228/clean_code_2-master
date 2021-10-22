@@ -14,28 +14,22 @@ MORSE_SOUND = {
     }
 
 
-def send_message_robot(adres, soobshchenie):
-    print('Отправка сообщения роботу...')
-    answer = requests.post(adres, soobshchenie.encode('utf-8'))
+def send_message_robot(adres):
+    answer = requests.post(adres)
 
     if answer.status_code == 200:
-        print('Команда принята.')
         time.sleep(1)
-        print('Бегу к вам!')
     elif answer.status_code == 501:
-        print('Команда принята. Продолжаю выполнять прежнюю инструкцию.')
-    else:
         print('Команда не принята. Не понял вас!')    
 
-
+ 
 def contact_the_robot(adres):
     answer = requests.get(adres)
-    soobshchenie = 'Проверка связи с роботом...' 
-    print(soobshchenie)
+    message = 'Проверка связи с роботом...' 
 
-    with alive_bar(len(soobshchenie), bar='brackets', spinner='radioactive') as bar:
+    with alive_bar(len(message), bar='brackets', spinner='radioactive') as bar:
 
-        for _ in range(len(soobshchenie)):
+        for _ in range(len(message)):
             time.sleep(0.06)
             bar()
 
@@ -46,10 +40,8 @@ def contact_the_robot(adres):
     else:
         print('Нет связи с роботом')    
 
-    print()
 
-
-def igrat_muzyku(soundfile):
+def play_music(soundfile):
     sound = pygame.mixer.Sound(soundfile)
     clock = pygame.time.Clock()
     sound.play()
@@ -58,17 +50,16 @@ def igrat_muzyku(soundfile):
         clock.tick(FRAMERATE)
 
 
-def proigrat_muzyku_Morze(morz):
+def play_morse_music(morz):
     with alive_bar(len(morz), bar='brackets', spinner='dots_waves2') as bar:
-        for num in range(24):
+        for num in range(len(morz)):
             if morz[num] == '.':
-                igrat_muzyku(pygame.mixer.Sound('dot.ogg'))
+                play_music(pygame.mixer.Sound('dot.ogg'))
             elif morz[num] == '-':
-                igrat_muzyku(pygame.mixer.Sound('dash.ogg'))
+                play_music(pygame.mixer.Sound('dash.ogg'))
             elif morz[num] == '|':
-                igrat_muzyku(pygame.mixer.Sound('long_silence.ogg'))
+                play_music(pygame.mixer.Sound('long_silence.ogg'))
             bar()
-    print()
 
 
 if __name__ == '__main__':
@@ -137,9 +128,8 @@ if __name__ == '__main__':
     morz = ''
 
     contact_the_robot(adres)
-    send_message_robot(adres, 'ыыы')
+    send_message_robot(adres)
 
     for symbol in message:
         morz += azbukaмorze[symbol]
-#изменить названия
-#сокр все что возможно
+    play_morse_music(morz)
